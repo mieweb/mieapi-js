@@ -3,7 +3,7 @@
   "version": "1.0.06",
   "description": "A npm package to simplify API interactions with WebChart Electronic Health records",
   "type": "module",
-  "main": "src/index.js",
+  "main": "index.js",
   "scripts": {
     "test": "mocha"
   },
