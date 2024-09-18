@@ -19,10 +19,5 @@
     "@logtail/winston": "^0.4.21",
     "base-64": "^1.0.0",
     "winston": "^3.13.0"
-  },
-  "devDependencies": {
-    "chai": "^5.1.1",
-    "mocha": "^10.4.0",
-    "sinon": "^18.0.0"
   }
 }
