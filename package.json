@@ -1,6 +1,6 @@
 {
   "name": "mieapi",
-  "version": "1.0.06",
+  "version": "1.0.0",
   "description": "A npm package to simplify API interactions with WebChart Electronic Health records",
   "type": "module",
   "main": "index.js",
