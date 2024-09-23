@@ -18,6 +18,9 @@
     "@logtail/node": "^0.4.21",
     "@logtail/winston": "^0.4.21",
     "base-64": "^1.0.0",
+    "chai": "^5.1.1",
+    "mocha": "^10.7.3",
+    "sinon": "^19.0.2",
     "winston": "^3.13.0"
   }
 }
