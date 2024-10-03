@@ -1,5 +1,5 @@
 {
-  "name": "mieapi",
+  "name": "@mieweb/mieapi",
   "version": "1.0.0",
   "description": "A npm package to simplify API interactions with WebChart Electronic Health records",
   "type": "module",
@@ -7,6 +7,11 @@
   "scripts": {
     "test": "mocha"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mieweb/mieapi-js.git"
+  },
+  "homepage": "https://github.com/mieweb/mieapi-js#readme",
   "keywords": [
     "api",
     "service",
