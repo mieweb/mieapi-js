@@ -1,4 +1,4 @@
-import apiService from './src/apiService.js';
+import MIEApi from './src/MIEApi.js';
 
 // Exported the apiService for external use
-export default apiService;
+export default MIEApi;

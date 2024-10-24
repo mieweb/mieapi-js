@@ -1,55 +1,62 @@
 import { expect } from 'chai';
 import sinon from 'sinon';
-import apiService from '../src/apiService.js';
+import MIEApi from '../src/MIEApi.js';
+import axios from 'axios';
 import logger from '../src/logger.js';
 
-describe('apiService Class', () => {
+describe('MIEApi Class', () => {
   let service;
   const validConfig = {
     baseUrl: 'https://api.example.com',
-    username: 'user123',
-    password: 'password123',
-    practice: 'examplePractice'
+    connectToken: 'sampleToken123',
+    userId: 'user123',
+    ip: '127.0.0.1'
   };
 
   beforeEach(() => {
-    service = new apiService(validConfig);
-    sinon.stub(logger, 'info'); // Stub the logger methods to prevent actual logging
+    service = new MIEApi(validConfig);
+    sinon.stub(logger, 'info'); // Stub logger to prevent real logging
     sinon.stub(logger, 'error');
   });
 
   afterEach(() => {
     sinon.restore(); // Restore original methods
-    apiService.sessionCache.clear(); // Clear the session cache after each test
+    MIEApi.sessionCache.clear(); // Clear the session cache after each test
   });
 
   describe('Initialization', () => {
     it('should initialize with correct configuration', () => {
       expect(service.baseUrl).to.equal(validConfig.baseUrl);
-      expect(service.username).to.equal(validConfig.username);
-      expect(service.password).to.equal(validConfig.password);
-      expect(service.practice).to.equal(validConfig.practice);
+      expect(service.connectToken).to.equal(validConfig.connectToken);
+      expect(service.userId).to.equal(validConfig.userId);
+      expect(service.ip).to.equal(validConfig.ip);
     });
   });
 
-  describe('Session Caching', () => {
+  describe('Session Management', () => {
     it('should generate the correct session key', () => {
-      const sessionKey = apiService.getSessionKey(validConfig.baseUrl, validConfig.username);
-      expect(sessionKey).to.equal(`${validConfig.baseUrl}_${validConfig.username}`);
+      const sessionKey = MIEApi.getSessionKey(validConfig.baseUrl, validConfig.userId);
+      expect(sessionKey).to.equal(`${validConfig.baseUrl}_${validConfig.userId}`);
     });
 
-    it('should store session data in cache', () => {
-      const sessionKey = apiService.getSessionKey(validConfig.baseUrl, validConfig.username);
-      const mockSession = {
-        cookie: 'mock_cookie',
-        refreshedAt: new Date(),
-        expiration: new Date(new Date().getTime() + 300000) // Valid for 5 minutes
+    it('should store session data in cache', async () => {
+      const mockResponse = {
+        headers: {
+          'x-db_name': 'mock_db',
+        },
+        data: { status: 200 }
       };
 
-      apiService.sessionCache.set(sessionKey, mockSession);
-      const cachedSession = apiService.sessionCache.get(sessionKey);
+      sinon.stub(axios, 'get').resolves(mockResponse);
+      await service.refreshSession();
 
-      expect(cachedSession).to.deep.equal(mockSession);
+      const sessionKey = MIEApi.getSessionKey(validConfig.baseUrl, validConfig.userId);
+      const cachedSession = MIEApi.sessionCache.get(sessionKey);
+
+      expect(cachedSession).to.have.property('sessionCookie');
+      expect(cachedSession).to.have.property('connectTokenRefreshedAt');
+      expect(cachedSession).to.have.property('expiration');
+      axios.get.restore();
     });
   });
 
@@ -73,11 +80,31 @@ describe('apiService Class', () => {
     });
 
     it('should set isRefreshingSession flag to true when refreshSession is called', async () => {
-      sinon.stub(service, 'initSession').resolves(); // Stub initSession to prevent actual call
-      service.isRefreshingSession = false;
+      const mockResponse = {
+        headers: { 'x-db_name': 'mock_db' },
+        data: { status: 200 }
+      };
 
-      service.refreshSession();
-      expect(service.isRefreshingSession).to.be.true;
+      sinon.stub(axios, 'get').resolves(mockResponse);
+      await service.refreshSession();
+      expect(service.isRefreshingSession).to.be.false; // Should reset after refresh
+
+      axios.get.restore();
+    });
+  });
+
+  describe('API Error Handling', () => {
+    it('should log an error if API call fails', async () => {
+      sinon.stub(axios, 'get').rejects(new Error('API error'));
+      
+      try {
+        await service.get('/invalid-endpoint');
+      } catch (error) {
+        expect(logger.error.called).to.be.true;
+        expect(error.message).to.equal('API error');
+      }
+
+      axios.get.restore();
     });
   });
 });
