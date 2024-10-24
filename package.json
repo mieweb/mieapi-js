@@ -21,12 +21,10 @@
   "license": "MIE",
   "dependencies": {
     "axios": "^1.7.7",
-    "base-64": "^1.0.0",
+    "form-data": "^4.0.1",
     "winston": "^3.13.0"
   },
   "devDependencies": {
-    "@logtail/node": "^0.4.21",
-    "@logtail/winston": "^0.4.21",
     "chai": "^5.1.1",
     "mocha": "^10.7.3",
     "sinon": "^19.0.2"

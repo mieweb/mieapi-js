@@ -1,6 +1,5 @@
 import axios from 'axios';
 import logger from './logger.js'; 
-import base64 from 'base-64';
 import { endpoints } from './apiConfig.js';
 
 class MIEApi {
