@@ -1,8 +1,10 @@
 import axios from 'axios';
 import logger from './logger.js';
 import { endpoints } from './apiConfig.js';
-import { version } from "../package.json";
+import packageJson from "../package.json"  assert { type: "json" };
 
+
+const version = packageJson.version;
 class MIEApi {
   static sessionCache = new Map();
 
