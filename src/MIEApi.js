@@ -1,10 +1,9 @@
 import axios from 'axios';
 import logger from './logger.js';
 import { endpoints } from './apiConfig.js';
-import packageJson from "../package.json"  assert { type: "json" };
+import { version } from "../package.json";
 
 
-const version = packageJson.version;
 class MIEApi {
   static sessionCache = new Map();
 
@@ -40,6 +39,7 @@ class MIEApi {
           'User-Agent': `mieapi (Refresh Connection)/${version}`
         }
       });
+      console.log(` mieapi (Refresh Connection)/${version}`);
 
       if (!response || response.data.status !== 200) {
         logger.warn(`Session refresh failed with status: ${response?.data?.status || 'unknown'}`);
