@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 import sinon from 'sinon';
-import MIEApi from '../src/MIEApi.js';
+import MIEApi from './MIEApiTest.js';
 import axios from 'axios';
 import logger from '../src/logger.js';
 

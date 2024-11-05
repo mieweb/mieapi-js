@@ -1,8 +1,14 @@
+// Temporary Test File for Mocha Compatibility
+// This file replicates the main MIEApi.js functionality to address compatibility issues with the original version.
+// It is specifically created for running tests with Mocha and may be removed once the compatibility issue is resolved.
+
+
 import axios from 'axios';
-import logger from './logger.js';
-import { endpoints } from './apiConfig.js';
-import  packageJson  from "../package.json"
-const version = packageJson.version;
+import logger from '../src/logger.js';
+import { endpoints } from '../src/apiConfig.js';
+
+
+const version = '1.0.1';
 
 class MIEApi {
 
